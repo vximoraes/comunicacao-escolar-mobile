@@ -117,7 +117,7 @@ fun LoginScreen(
 
             // Subtítulo
             Text(
-                text = "Faça login na sua conta de\ncomunicação escolar.",
+                text = "Sistema de comunicação escolar.",
                 fontSize = 15.sp,
                 color = colors.loginGrayText,
                 lineHeight = 22.sp
@@ -208,6 +208,7 @@ fun LoginScreen(
                     text = "Esqueceu a senha?",
                     fontSize = 13.sp,
                     color = colors.loginDarkBlue,
+                    fontWeight = FontWeight.SemiBold,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable { onEsqueciSenha(email) }
                 )
@@ -228,8 +229,8 @@ fun LoginScreen(
             ) {
                 Text(
                     text = "Entrar",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
                     color = colors.textOnPrimary
                 )
             }
@@ -259,8 +260,10 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.padding(start = 8.dp))
                 Text(
                     text = "Entrar com Google",
-                    fontSize = 15.sp,
-                    color = colors.loginDarkBlue
+                    fontSize = 14.sp,
+                    color = colors.loginDarkBlue,
+                    fontWeight = FontWeight.Medium,
+
                 )
             }
 
@@ -273,13 +276,13 @@ fun LoginScreen(
             ) {
                 Text(
                     text = "Não tem uma conta? ",
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     color = colors.loginGrayText
                 )
                 Text(
                     text = "Cadastre-se",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold,
                     textDecoration = TextDecoration.Underline,
                     color = colors.loginDarkBlue,
                     modifier = Modifier.clickable { onRegister() }
