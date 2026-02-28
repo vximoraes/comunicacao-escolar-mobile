@@ -12,6 +12,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import android.app.Activity
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.view.WindowCompat
 
 /**
  * Cores customizadas para a aplicação que mudam conforme o tema
@@ -46,6 +51,13 @@ data class ComunicacaoEscolarColors(
     val featureCyan: Color,
     val featurePink: Color,
     val featureRed: Color,
+    // Cores da LoginScreen
+    val loginBackground: Color,
+    val loginDarkBlue: Color,
+    val loginGrayText: Color,
+    val loginBorder: Color,
+    val loginFooterGray: Color,
+    val loginGoogleRed: Color,
     val isDark: Boolean = false  // Flag para identificar o tema
 )
 
@@ -82,6 +94,13 @@ val LightComunicacaoEscolarColors = ComunicacaoEscolarColors(
     featureCyan = Color(0xFF06B6D4),
     featurePink = Color(0xFFEC4899),
     featureRed = Color(0xFFEF4444),
+    // Cores da LoginScreen
+    loginBackground = LoginBackground,
+    loginDarkBlue = DarkBlue,
+    loginGrayText = LoginGrayText,
+    loginBorder = LoginBorder,
+    loginFooterGray = FooterGray,
+    loginGoogleRed = GoogleRed,
     isDark = false
 )
 
@@ -118,6 +137,13 @@ val DarkComunicacaoEscolarColors = ComunicacaoEscolarColors(
     featureCyan = Color(0xFF22D3EE),
     featurePink = Color(0xFFF472B6),
     featureRed = Color(0xFFFF6B81),
+    // Cores da LoginScreen (adaptadas para dark)
+    loginBackground = Color(0xFF121212),
+    loginDarkBlue = Color(0xFF5BA4CF),
+    loginGrayText = Color(0xFFB0B0B0),
+    loginBorder = Color(0xFF3A3A3A),
+    loginFooterGray = Color(0xFF6B6B6B),
+    loginGoogleRed = Color(0xFFFF6B6B),
     isDark = true
 )
 
@@ -170,19 +196,53 @@ fun ComunicacaoEscolarTheme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+
+    // 1️⃣ Material Color Scheme
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme)
+                dynamicDarkColorScheme(context)
+            else
+                dynamicLightColorScheme(context)
         }
+
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
 
-    // Seleciona as cores customizadas baseado no tema
-    val ComunicacaoEscolarColors = if (darkTheme) DarkComunicacaoEscolarColors else LightComunicacaoEscolarColors
+    // 2️⃣ Suas cores customizadas
+    val filaColors =
+        if (darkTheme) DarkComunicacaoEscolarColors
+        else LightComunicacaoEscolarColors
 
-    CompositionLocalProvider(LocalComunicacaoEscolarColors provides ComunicacaoEscolarColors) {
+    // 3️⃣ Controle da System UI
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+
+            // Cor da Status Bar
+            window.statusBarColor = filaColors.background.toArgb()
+
+            // Cor da Navigation Bar
+            window.navigationBarColor = filaColors.background.toArgb()
+
+            val insetsController =
+                WindowCompat.getInsetsController(window, view)
+
+            // Define cor dos ícones:
+            // true = ícones escuros
+            // false = ícones claros
+            insetsController.isAppearanceLightStatusBars = !darkTheme
+            insetsController.isAppearanceLightNavigationBars = !darkTheme
+        }
+    }
+
+    // 4️⃣ Aplica tema
+    CompositionLocalProvider(
+        LocalComunicacaoEscolarColors provides filaColors
+    ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,

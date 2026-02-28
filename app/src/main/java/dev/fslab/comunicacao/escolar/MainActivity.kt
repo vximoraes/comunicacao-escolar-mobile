@@ -46,7 +46,8 @@ fun ComunicacaoEscolarApp() {
                         navController.navigate("esqueci_senha?email=$email")
                     },
                     onRegister = { navController.navigate("cadastro") },
-                    onLogin = { navController.navigate("home") }
+                    onLogin = { navController.navigate("home") },
+                    onLoginGoogle = { /* TODO: Implementar login com Google */ }
                 )
             }
 //            composable(
